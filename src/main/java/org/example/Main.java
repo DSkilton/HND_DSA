@@ -1,46 +1,53 @@
 package org.example;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 	public static void main(String[] args) {
-		displayMenu();
+		displayWelcome();
 	}
 
-	private static void displayMenu() {
+	private static void displayWelcome() {
 		System.out.println("Welcome to the Data Processor");
-
 		System.out.println("Usage: java Main <file_path> [parser_type]");
 		System.out.println("file_path: Path to the file to process.");
 		System.out.println("parser_type: (Optional) Specifies a parser type (mixed, integer, decimal).");
 
+		displayMenu();
+	}
+
+	private static void displayMenu() {
+		System.out.println("Entering displayMenu...");
+
 		Scanner scanner = new Scanner(System.in);
 
-		while (true) {
-			System.out.println("Choose an option:");
-			System.out.println("1. Enter file path and parser type");
-			System.out.println("2. Exit");
+		System.out.println("Choose an option:");
+		System.out.println("1. Enter file path and parser type");
+		System.out.println("2. Exit");
 
-			int choice = getValidatedChoice(scanner);
-			scanner.nextLine();  // clear line
+		int choice = getValidatedChoice(scanner);
+		scanner.nextLine();  // clear line
 
-			switch (choice) {
-				case 1:
-					handleFileProcessing(scanner);
-					break;
-				case 2:
-					System.exit(0);
-				default:
-					System.out.println("Invalid choice. Please try again.");
-			}
+		switch (choice) {
+			case 1:
+				handleFileProcessing(scanner);
+				break;
+			case 2:
+				System.exit(0);
+			default:
+				System.out.println("Invalid choice. Please try again.");
+				displayMenu();
 		}
+
+		System.out.println("Exiting displayMenu...");
 	}
 
 	private static int getValidatedChoice(Scanner scanner) {
+		System.out.println("Exiting getValidatedChoice...");
+
 		while (true) {
 			System.out.println("Enter a number:" );
 			try {
@@ -59,46 +66,61 @@ public class Main {
 	}
 
 	private static void handleFileProcessing(Scanner scanner) {
-		System.out.println("Enter file path:");
-		String filePath = scanner.nextLine();
+		System.out.println("Entering handleFileProcessing...");
 
-		File file = new File(filePath);
-		if (file == null) {
-			System.out.println("No valid file provided.");
-			return;
-		}
+		while (true) {
+			System.out.println("Enter file path:");
+			File file = getValidFile(scanner);
+			if (file == null) {
+				System.out.println("No valid file provided.");
+			}
 
-		System.out.println("Choose a processing option:");
-		System.out.println("1. Parse data with a parser type.");
-		System.out.println("2. Apply processing strategies.");
-		int choice = scanner.nextInt();
-		scanner.nextLine();
+			System.out.println("Choose a processing option:");
+			System.out.println("1. Parse data with a parser type.");
+			System.out.println("2. Apply processing strategies.");
+			if (!scanner.hasNextInt()) {
+				System.out.println("Invalid input. Please enter a number.");
+				scanner.nextLine(); // Clear invalid input
+				continue; // Restart the loop
+			}
 
-		switch (choice) {
-			case 1:
-				System.out.println("Case 1");
-//				handleParsing(scanner, file);
-				break;
-			case 2:
-				System.out.println("Case 2");
-//				handleStrategies(scanner, file);
-				break;
+			int choice = scanner.nextInt();
+			scanner.nextLine(); // Clear newline
+
+			switch (choice) {
+				case 1:
+					System.out.println("Case 1: Parsing data...");
+//					 handleParsing(scanner, file);
+					break;
+				case 2:
+					System.out.println("Case 2: Applying strategies...");
+					// handleStrategies(scanner, file);
+					break;
+				default:
+					System.out.println("Invalid choice. Please try again.");
+					continue; // Retry options
+			}
+			break; // Exit after valid processing
 		}
 	}
 
-	private static File validateAndRetrieveFile(String initialPath) {
-		Scanner scanner = new Scanner(System.in);
-		String filePath = initialPath;
+	public static File getValidFile(Scanner scanner) {
+		System.out.println("Entering getValidFile...");
 
 		while (true) {
-			File file = new File(filePath);
+			System.out.println("Enter file path:");
+			String filePath = scanner.nextLine();
 
-			if (!file.exists()) {
-				System.out.println("Error: The file does not exist: " + filePath);
-			} else if (!file.canRead()) {
-				System.out.println("Error: The file cannot be read: " + filePath);
-			} else {
-				return file;
+			try {
+				File file = new File(filePath);
+				if (file.exists() && file.canRead() && !file.isDirectory()) {
+					System.out.println("Exiting getValidFile...");
+					return file;
+				} else {
+					System.out.println("Invalid file path or directory: " + filePath);
+				}
+			} catch (Exception e) {
+				System.out.println("Error: " + e.getMessage());
 			}
 
 			System.out.println("Do you want to enter a new file path? (y/n)");
@@ -106,9 +128,6 @@ public class Main {
 
 			if (choice.equals("n")) {
 				return null;
-			} else {
-				System.out.println("Enter new file path:");
-				filePath = scanner.nextLine();
 			}
 		}
 	}
