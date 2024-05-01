@@ -1,6 +1,7 @@
 package org.example;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -20,7 +21,7 @@ public class Main {
 	}
 
 	private static void displayMenu() {
-		System.out.println("Entering displayMenu...");
+//		System.out.println("Entering displayMenu...");
 
 		Scanner scanner = new Scanner(System.in);
 
@@ -42,11 +43,11 @@ public class Main {
 				displayMenu();
 		}
 
-		System.out.println("Exiting displayMenu...");
+//		System.out.println("Exiting displayMenu...");
 	}
 
 	private static int getValidatedChoice(Scanner scanner) {
-		System.out.println("Exiting getValidatedChoice...");
+//		System.out.println("Entering getValidatedChoice...");
 
 		while (true) {
 			System.out.println("Enter a number:" );
@@ -69,7 +70,6 @@ public class Main {
 		System.out.println("Entering handleFileProcessing...");
 
 		while (true) {
-			System.out.println("Enter file path:");
 			File file = getValidFile(scanner);
 			if (file == null) {
 				System.out.println("No valid file provided.");
@@ -90,11 +90,11 @@ public class Main {
 			switch (choice) {
 				case 1:
 					System.out.println("Case 1: Parsing data...");
-//					 handleParsing(scanner, file);
+					 handleParsing(scanner, file);
 					break;
 				case 2:
 					System.out.println("Case 2: Applying strategies...");
-					// handleStrategies(scanner, file);
+//					 handleStrategies(scanner, file);
 					break;
 				default:
 					System.out.println("Invalid choice. Please try again.");
@@ -105,7 +105,7 @@ public class Main {
 	}
 
 	public static File getValidFile(Scanner scanner) {
-		System.out.println("Entering getValidFile...");
+//		System.out.println("Entering getValidFile...");
 
 		while (true) {
 			System.out.println("Enter file path:");
@@ -132,20 +132,81 @@ public class Main {
 		}
 	}
 
-	private static Parser setupParserChain(String parserType) {
-		return null;
+	public static void handleParsing(Scanner scanner, File file) {
+//		System.out.println("Entering handleParsing...");
+
+		System.out.println("Enter parser type (mixed, integer, decimal):");
+		String parserType = scanner.nextLine().toLowerCase();
+
+		Parser parser = setupParserChain(parserType);
+
+		try {
+			List<List<Object>> data = parser.parseFile(file);
+			System.out.println("Parsed data: " + data);
+
+			displayProcessingOptions(scanner, data);
+		} catch (IOException e) {
+			System.out.println("Failed to process the file: " + e.getMessage());
+		}
+
+		System.out.println("Exiting handleParsing...");
 	}
 
-	private static void displayProcessingOptions(List<List<Object>> data) {
+	private static void displayProcessingOptions(Scanner scanner, List<List<Object>> data) {
+		System.out.println("Entering displayProcessingOptions...");
 
+		while (true) {
+			System.out.println("Choose an operation:");
+			System.out.println("1. Sort by specific column.");
+			System.out.println("2. Search for a specific value.");
+			System.out.println("3. Exit.");
+
+			int choice = getValidatedChoice(scanner);
+
+			switch (choice) {
+				case 1:
+					System.out.println("Enter column index to sort by:");
+					int colIndex = scanner.nextInt();
+					sortData(data, colIndex);
+					System.out.println("Sorted data: " + data);
+					break;
+
+				case 2:
+					System.out.println("Enter value to search for:");
+					String searchValue = scanner.next();
+					int index = searchData(data, searchValue);
+					System.out.println("Found at row: " + index);
+					break;
+
+				case 3:
+					return;
+
+				default:
+					System.out.println("Invalid choice. Please try again.");
+			}
+		}
+
+//		System.out.println("Exiting displayProcessingOptions...");
+	}
+
+	private static Parser setupParserChain(String parserType) {
+		IntegerParser integerParser = new IntegerParser();
+//		DecimalParser decimalParser = new DecimalParser();
+//		StringParser stringParser = new StringParser();
+
+//		integerParser.setNext(decimalParser);
+//		decimalParser.setNext(stringParser);
+
+
+		return integerParser;
 	}
 
 	private static void sortData(List<List<Object>> data, int colIndex) {
 
 	}
 
-	private static void searchData(List<List<Object>> data, String str) {
-
+	private static int searchData(List<List<Object>> data, String str) {
+		return 0;
 	}
 
 
