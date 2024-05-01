@@ -5,13 +5,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class AbstractDataParser implements Parser {
 	public abstract List<Object> parseLine(String line);
 
 	protected Parser next;
-	//This method is very important for the Chain of Responsibility pattern
+	protected static List<String> headers;
 
 	public void setNext(Parser next) {
 		this.next = next;
@@ -23,12 +24,21 @@ public abstract class AbstractDataParser implements Parser {
 		List<List<Object>> data = new ArrayList<>();
 
 		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-			String line;
-			while ((line = reader.readLine()) != null) {
-				data.add(parseLine(line));
+			String line = reader.readLine();
+
+			if (line != null) {
+				headers = Arrays.asList(line.split(","));
+				System.out.println("Headers: " + headers);
+
+				while ((line = reader.readLine()) != null) {
+					System.out.println("Reading Line: " + line);
+					List<Object> parsedLine = parseLine(line);
+
+					System.out.println("Parsed Line: " + parsedLine);
+					data.add(parsedLine);
+				}
 			}
 		}
 		return data;
 	}
-
 }

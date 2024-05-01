@@ -8,11 +8,13 @@ import java.util.List;
 public class IntegerParser extends AbstractDataParser {
 	@Override
 	public List<List<Object>> parseFile(File file) throws IOException {
-		return null;
+		System.out.println("IntegerParser: Parse File");
+		return super.parseFile(file);
 	}
 
 	@Override
 	public List<Object> parseLine(String line) {
+		System.out.println("IntegerParser: Parse Line");
 		List<Object> row = new ArrayList<>();
 		String[] values = line.split(",");
 
@@ -20,6 +22,7 @@ public class IntegerParser extends AbstractDataParser {
 			try {
 				row.add(Integer.parseInt(value.trim()));
 			} catch (NumberFormatException e) {
+				System.out.println("Passing to Next Parser");
 				if (next != null) {
 					return next.parseLine(line);
 				} else {

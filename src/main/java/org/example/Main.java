@@ -2,6 +2,7 @@ package org.example;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -42,7 +43,6 @@ public class Main {
 				System.out.println("Invalid choice. Please try again.");
 				displayMenu();
 		}
-
 //		System.out.println("Exiting displayMenu...");
 	}
 
@@ -56,7 +56,6 @@ public class Main {
 					System.out.println("Invalid choice. Please try again.");
 					scanner.nextLine();
 				}
-
 				int choice = scanner.nextInt();
 				return choice;
 			} catch (InputMismatchException e) {
@@ -78,13 +77,8 @@ public class Main {
 			System.out.println("Choose a processing option:");
 			System.out.println("1. Parse data with a parser type.");
 			System.out.println("2. Apply processing strategies.");
-			if (!scanner.hasNextInt()) {
-				System.out.println("Invalid input. Please enter a number.");
-				scanner.nextLine(); // Clear invalid input
-				continue; // Restart the loop
-			}
 
-			int choice = scanner.nextInt();
+			int choice = getValidatedChoice(scanner);
 			scanner.nextLine(); // Clear newline
 
 			switch (choice) {
@@ -143,8 +137,7 @@ public class Main {
 		try {
 			List<List<Object>> data = parser.parseFile(file);
 			System.out.println("Parsed data: " + data);
-
-			displayProcessingOptions(scanner, data);
+			displayProcessingOptions(scanner, data, parser);
 		} catch (IOException e) {
 			System.out.println("Failed to process the file: " + e.getMessage());
 		}
@@ -152,20 +145,22 @@ public class Main {
 		System.out.println("Exiting handleParsing...");
 	}
 
-	private static void displayProcessingOptions(Scanner scanner, List<List<Object>> data) {
+	private static void displayProcessingOptions(Scanner scanner, List<List<Object>> data, Parser parser) {
 //		System.out.println("Entering displayProcessingOptions...");
 
 		while (true) {
 			System.out.println("Choose an operation:");
 			System.out.println("1. Sort by specific column.");
 			System.out.println("2. Search for a specific value.");
-			System.out.println("3. Exit.");
+			System.out.println("3. Display headers.");
+			System.out.println("4. Exit.");
 
 			int choice = getValidatedChoice(scanner);
 
 			switch (choice) {
 				case 1:
 					System.out.println("Enter column index to sort by:");
+					displayHeaders(AbstractDataParser.headers);
 					int colIndex = scanner.nextInt();
 					sortData(data, colIndex);
 					System.out.println("Sorted data: " + data);
@@ -177,33 +172,67 @@ public class Main {
 					int index = searchData(data, searchValue);
 					System.out.println("Found at row: " + index);
 					break;
+				case 3:
+					System.out.println("Display Headers Switch");
+					displayHeaders(parser);
+					break;
+				case 4:
+					return; //if we return, that will close our program
 				default:
 					System.out.println("Invalid choice. Please try again.");
 			}
 		}
-
 //		System.out.println("Exiting displayProcessingOptions...");
 	}
 
-	private static Parser setupParserChain(String parserType) {
+	public static Parser setupParserChain(String parserType) {
 		IntegerParser integerParser = new IntegerParser();
-//		DecimalParser decimalParser = new DecimalParser();
-//		StringParser stringParser = new StringParser();
+		DecimalParser decimalParser = new DecimalParser();
+		StringParser stringParser = new StringParser();
 
-//		integerParser.setNext(decimalParser);
-//		decimalParser.setNext(stringParser);
+		integerParser.setNext(decimalParser);
+		decimalParser.setNext(stringParser);
 
+		if (parserType.equals("integer")) {
+			return integerParser;
+		} else if (parserType.equals("decimal")) {
+			return decimalParser;
+		}
 
-		return integerParser;
+		MixedDataParser mixedParser = new MixedDataParser();
+		mixedParser.setFirstParser(integerParser);
+		System.out.println("returning parser from chain");
+		return mixedParser;
 	}
 
-	private static void sortData(List<List<Object>> data, int colIndex) {
+	public static void displayHeaders(Parser parser) {
+		System.out.println("Display Headers -> ParserType: " + parser.getClass());
 
+		System.out.println("Headers: ");
+		List<String> headers = AbstractDataParser.headers;
+		System.out.println("Headers: " + headers);
+
+		if (headers != null) {
+			displayHeaders(headers);
+		} else {
+			System.out.println("No headers available.");
+		}
 	}
 
-	private static int searchData(List<List<Object>> data, String str) {
-		return 0;
+	private static void displayHeaders(List<String> headers) {
+		for (int i = 0; i < headers.size(); i++) {
+			System.out.println(i + ": " + headers.get(i));
+		}
 	}
 
+	public static void sortData(List<List<Object>> data, int colIndex) {
+		data.sort(Comparator.comparing(a -> a.get(colIndex).toString()));
+	}
 
+	public static int searchData(List<List<Object>> data, String value) {
+		for (int i = 0; i < data.size(); i++) {
+			if (data.get(i).contains(value)) return i;
+		}
+		return -1;
+	}
 }
