@@ -165,7 +165,6 @@ public class Main {
 					sortData(data, colIndex);
 					System.out.println("Sorted data: " + data);
 					break;
-
 				case 2:
 					System.out.println("Enter value to search for:");
 					String searchValue = scanner.next();

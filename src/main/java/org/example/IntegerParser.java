@@ -14,7 +14,7 @@ public class IntegerParser extends AbstractDataParser {
 
 	@Override
 	public List<Object> parseLine(String line) {
-		System.out.println("IntegerParser: Parse Line");
+		System.out.println("IntegerParser: Parse Line: " + line);
 		List<Object> row = new ArrayList<>();
 		String[] values = line.split(",");
 
@@ -26,7 +26,7 @@ public class IntegerParser extends AbstractDataParser {
 				if (next != null) {
 					return next.parseLine(line);
 				} else {
-					row.add(value.trim());  // Default to string if no parser
+					row.add(value.trim());  // Default to string
 				}
 			}
 		}
