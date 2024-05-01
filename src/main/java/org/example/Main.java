@@ -46,7 +46,7 @@ public class Main {
 //		System.out.println("Exiting displayMenu...");
 	}
 
-	private static int getValidatedChoice(Scanner scanner) {
+	public static int getValidatedChoice(Scanner scanner) {
 //		System.out.println("Entering getValidatedChoice...");
 
 		while (true) {
@@ -67,7 +67,7 @@ public class Main {
 	}
 
 	private static void handleFileProcessing(Scanner scanner) {
-		System.out.println("Entering handleFileProcessing...");
+//		System.out.println("Entering handleFileProcessing...");
 
 		while (true) {
 			File file = getValidFile(scanner);
@@ -153,7 +153,7 @@ public class Main {
 	}
 
 	private static void displayProcessingOptions(Scanner scanner, List<List<Object>> data) {
-		System.out.println("Entering displayProcessingOptions...");
+//		System.out.println("Entering displayProcessingOptions...");
 
 		while (true) {
 			System.out.println("Choose an operation:");
@@ -177,10 +177,6 @@ public class Main {
 					int index = searchData(data, searchValue);
 					System.out.println("Found at row: " + index);
 					break;
-
-				case 3:
-					return;
-
 				default:
 					System.out.println("Invalid choice. Please try again.");
 			}
