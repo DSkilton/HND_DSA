@@ -22,7 +22,6 @@ public class IntegerParser extends AbstractDataParser {
 			try {
 				row.add(Integer.parseInt(value.trim()));
 			} catch (NumberFormatException e) {
-				System.out.println("Passing to Next Parser");
 				if (next != null) {
 					return next.parseLine(line);
 				} else {
