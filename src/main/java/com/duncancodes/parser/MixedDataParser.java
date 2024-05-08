@@ -1,10 +1,12 @@
-package org.example;
+package com.duncancodes.parser;
+
+import com.duncancodes.parser.Parser;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-class MixedDataParser implements Parser {
+public class MixedDataParser implements Parser {
 	private Parser firstParser;
 
 	public void setFirstParser(Parser parser) {

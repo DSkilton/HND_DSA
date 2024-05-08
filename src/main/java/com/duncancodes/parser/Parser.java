@@ -1,4 +1,4 @@
-package org.example;
+package com.duncancodes.parser;
 
 import java.io.File;
 import java.io.IOException;

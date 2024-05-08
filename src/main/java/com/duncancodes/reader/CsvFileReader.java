@@ -1,4 +1,4 @@
-package org.example;
+package com.duncancodes.reader;
 
 import java.util.List;
 

@@ -1,4 +1,6 @@
-package org.example;
+package com.duncancodes.parser.numeric;
+
+import com.duncancodes.parser.AbstractDataParser;
 
 import java.io.File;
 import java.io.IOException;

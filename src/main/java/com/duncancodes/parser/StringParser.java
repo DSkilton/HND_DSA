@@ -1,9 +1,9 @@
-package org.example;
+package com.duncancodes.parser;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class StringParser extends AbstractDataParser {
+public class StringParser extends AbstractDataParser {
 	@Override
 	public List<Object> parseLine(String line) {
 		System.out.println("StringParser: Parse File");

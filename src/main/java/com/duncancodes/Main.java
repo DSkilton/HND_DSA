@@ -1,4 +1,11 @@
-package org.example;
+package com.duncancodes;
+
+import com.duncancodes.parser.AbstractDataParser;
+import com.duncancodes.parser.MixedDataParser;
+import com.duncancodes.parser.Parser;
+import com.duncancodes.parser.StringParser;
+import com.duncancodes.parser.numeric.DecimalParser;
+import com.duncancodes.parser.numeric.IntegerParser;
 
 import java.io.File;
 import java.io.IOException;
@@ -160,7 +167,7 @@ public class Main {
 			switch (choice) {
 				case 1:
 					System.out.println("Enter column index to sort by:");
-					displayHeaders(AbstractDataParser.headers);
+					displayHeaders(AbstractDataParser.getHeaders());
 					int colIndex = scanner.nextInt();
 					sortData(data, colIndex);
 					System.out.println("Sorted data: " + data);
@@ -208,7 +215,7 @@ public class Main {
 		System.out.println("Display Headers -> ParserType: " + parser.getClass());
 
 		System.out.println("Headers: ");
-		List<String> headers = AbstractDataParser.headers;
+		List<String> headers = AbstractDataParser.getHeaders();
 		System.out.println("Headers: " + headers);
 
 		if (headers != null) {

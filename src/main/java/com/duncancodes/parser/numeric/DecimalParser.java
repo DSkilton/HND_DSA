@@ -1,9 +1,11 @@
-package org.example;
+package com.duncancodes.parser.numeric;
+
+import com.duncancodes.parser.AbstractDataParser;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class DecimalParser extends AbstractDataParser {
+public class DecimalParser extends AbstractDataParser {
 	@Override
 	public List<Object> parseLine(String line) {
 		List<Object> row = new ArrayList<>();

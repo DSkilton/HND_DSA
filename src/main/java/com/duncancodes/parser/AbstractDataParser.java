@@ -1,4 +1,4 @@
-package org.example;
+package com.duncancodes.parser;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -6,16 +6,25 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class AbstractDataParser implements Parser {
 	public abstract List<Object> parseLine(String line);
 
 	protected Parser next;
-	protected static List<String> headers;
+	private static List<String> headers;
 
 	public void setNext(Parser next) {
 		this.next = next;
+	}
+
+	public static List<String> getHeaders() {
+		if (headers != null) {
+			return headers;
+		}
+
+		return Collections.emptyList();
 	}
 
 	@Override
