@@ -1,0 +1,13 @@
+Name|Age|Salary
+Alice|30|50000
+Bob|25|42000
+Charlie|35|55000
+David|28|48000
+Eve|40|60000
+Frank|32|53000
+Grace|27|47000
+Hank|31|51000
+Ivy|29|49000
+Jack|34|52000
+Kim|33|51500
+Liam|26|46500

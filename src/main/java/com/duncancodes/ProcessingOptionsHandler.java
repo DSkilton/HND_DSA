@@ -1,10 +1,9 @@
 package com.duncancodes;
 
-import com.duncancodes.algorithms.search.BinarySearch;
-import com.duncancodes.algorithms.search.LinearSearch;
-import com.duncancodes.algorithms.sort.BubbleSort;
-import com.duncancodes.algorithms.sort.InsertionSort;
-import com.duncancodes.algorithms.sort.QuickSort;
+import com.duncancodes.algorithms.registry.SearchAlgorithmRegistry;
+import com.duncancodes.algorithms.registry.SortAlgorithmRegistry;
+import com.duncancodes.algorithms.search.SearchAlgorithm;
+import com.duncancodes.algorithms.sort.SortAlgorithm;
 import com.duncancodes.algorithms.util.PerformanceMetrics;
 import com.duncancodes.parser.AbstractDataParser;
 import com.duncancodes.parser.Parser;
@@ -92,19 +91,8 @@ public class ProcessingOptionsHandler {
 
 	private static void sortData(List<List<Object>> data, int colIndex, String sortAlgorithm) {
 		List<String> columnData = extractColumnData(data, colIndex);
-		switch (sortAlgorithm.toLowerCase()) {
-			case "bubble":
-				PerformanceMetrics.measureExecution(() -> BubbleSort.sort(columnData));
-				break;
-			case "insertion":
-				PerformanceMetrics.measureExecution(() -> InsertionSort.sort(columnData));
-				break;
-			case "quick":
-				PerformanceMetrics.measureExecution(() -> QuickSort.sort(columnData));
-				break;
-			default:
-				System.out.println("Unknown sorting algorithm.");
-		}
+		SortAlgorithm<String> algorithm = (SortAlgorithm<String>) SortAlgorithmRegistry.getAlgorithm(sortAlgorithm.toLowerCase());
+		PerformanceMetrics.measureExecution(() -> algorithm.sort(columnData));
 		updateColumnData(data, columnData, colIndex);
 	}
 
@@ -112,18 +100,12 @@ public class ProcessingOptionsHandler {
 		List<String> columnData = extractColumnData(data, 0); // Assuming search is done on the first column
 		int index = -1;
 		try {
-			switch (searchAlgorithm.toLowerCase()) {
-				case "linear":
-					index = PerformanceMetrics.measureExecution(() -> LinearSearch.search(columnData, value));
-					break;
-				case "binary":
-					// Binary search requires sorted data
-					QuickSort.sort(columnData);
-					index = PerformanceMetrics.measureExecution(() -> BinarySearch.search(columnData, value));
-					break;
-				default:
-					System.out.println("Unknown searching algorithm.");
+			SearchAlgorithm<String> algorithm = (SearchAlgorithm<String>) SearchAlgorithmRegistry.getAlgorithm(searchAlgorithm.toLowerCase());
+			if (searchAlgorithm.equalsIgnoreCase("binary")) {
+				SortAlgorithm<String> quickSort = (SortAlgorithm<String>) SortAlgorithmRegistry.getAlgorithm("quick");
+				quickSort.sort(columnData); // Ensure data is sorted for binary search
 			}
+			index = PerformanceMetrics.measureExecution(() -> algorithm.search(columnData, value));
 		} catch (Exception e) {
 			System.out.println("Error during search: " + e.getMessage());
 		}

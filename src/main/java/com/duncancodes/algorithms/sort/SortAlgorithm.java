@@ -1,0 +1,7 @@
+package com.duncancodes.algorithms.sort;
+
+import java.util.List;
+
+public interface SortAlgorithm <T extends Comparable<T>> {
+	void sort(List<T> data);
+}

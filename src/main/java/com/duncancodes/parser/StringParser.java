@@ -5,7 +5,7 @@ import java.util.List;
 
 public class StringParser extends AbstractDataParser {
 	@Override
-	public void registerParser() {
+	public void registerParser(){
 		ParserRegistry.registerParser("string", StringParser::new);
 	}
 

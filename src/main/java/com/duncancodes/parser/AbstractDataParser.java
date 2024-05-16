@@ -10,16 +10,17 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class AbstractDataParser implements Parser {
+	protected Parser next;
+
+	private static List<String> headers;
+
 	public abstract List<Object> parseLine(String line);
 
-	protected Parser next;
-	private static List<String> headers;
+	public abstract void registerParser();
 
 	public AbstractDataParser() {
 		registerParser();
 	}
-
-	public abstract void registerParser();
 
 	public void setNext(Parser next) {
 		this.next = next;

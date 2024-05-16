@@ -2,12 +2,12 @@ package com.duncancodes.algorithms.search;
 
 import java.util.List;
 
-public class BinarySearch {
-	public static int search(List<String> data, String target) {
+public class BinarySearch implements SearchAlgorithm<String> {
+	public int search(List<String> data, String target) {
 		return binarySearch(data, target, 0, data.size() - 1);
 	}
 
-	private static int binarySearch(List<String> data, String target, int low, int high) {
+	private int binarySearch(List<String> data, String target, int low, int high) {
 		if (low <= high) {
 			int mid = low + (high - low) / 2;
 
