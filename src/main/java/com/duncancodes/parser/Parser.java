@@ -8,4 +8,6 @@ public interface Parser {
 	List<List<Object>> parseFile (File file) throws IOException;
 
 	List<Object> parseLine(String line);
+
+	void setNext(Parser next);
 }

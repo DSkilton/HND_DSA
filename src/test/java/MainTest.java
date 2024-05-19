@@ -1,14 +1,16 @@
-import org.example.Main;
-import org.example.Parser;
+import com.duncancodes.ProcessingOptionsHandler;
+import com.duncancodes.parser.Parser;
+import com.duncancodes.parser.ParserHandler;
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Scanner;
 
-import static org.example.Main.setupParserChain;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MainTest {
@@ -19,11 +21,12 @@ public class MainTest {
 
 		Scanner scanner = new Scanner(byteArrayInputStream);
 
-		assertEquals(Main.getValidatedChoice(scanner), 1);
+		assertEquals(ProcessingOptionsHandler.getValidatedChoice(scanner), 1);
 	}
 
 	@Test
 	public void testParsingChain() throws IOException {
+		ParserHandler parserHandler = new ParserHandler();
 		// Create a temporary test file
 		Path tempFile = Files.createTempFile("testFile", ".csv");
 
@@ -37,7 +40,7 @@ public class MainTest {
 		}
 
 		// Test parsing chain
-		Parser parser = setupParserChain("mixed");
+		Parser parser = parserHandler.setupParserChain("mixed");
 		List<List<Object>> data = parser.parseFile(tempFile.toFile());
 
 		// Assertions to verify correctness

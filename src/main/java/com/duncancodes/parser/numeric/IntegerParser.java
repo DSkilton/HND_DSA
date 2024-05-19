@@ -1,6 +1,7 @@
 package com.duncancodes.parser.numeric;
 
 import com.duncancodes.parser.AbstractDataParser;
+import com.duncancodes.parser.Parser;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,5 +33,9 @@ public class IntegerParser extends AbstractDataParser {
 			}
 		}
 		return row;
+	}
+
+	public void setNext(Parser next) {
+
 	}
 }
