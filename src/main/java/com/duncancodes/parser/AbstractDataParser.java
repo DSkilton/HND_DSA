@@ -15,6 +15,12 @@ public abstract class AbstractDataParser implements Parser {
 	protected Parser next;
 	private static List<String> headers;
 
+	public AbstractDataParser() {
+		registerParser();
+	}
+
+	public abstract void registerParser();
+
 	public void setNext(Parser next) {
 		this.next = next;
 	}
